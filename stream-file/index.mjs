@@ -2,8 +2,8 @@ import * as fs from 'node:fs';
 
 console.log('test');
 
-const file = fs.createReadStream('index.mjs')
+const file = fs.createReadStream('index.mjs',{ highWaterMark: 10 })
 
-console.log(file);
-
-    
+file.on('data',data => { 
+    console.log('data________: ', data.toString());
+})
