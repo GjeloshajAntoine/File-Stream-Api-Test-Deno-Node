@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+
+<body>
+    <script>
+        let dirHandle;
+
+        async function getFile() {
+            // open file picker
+            dirHandle = await window.showDirectoryPicker();
+            
+            if (dirHandle.kind === 'file') {
+                // run file code
+            } else if (dirHandle.kind === 'directory') {
+                // run directory code
+            }
+            
+            console.log("fileHandle", dirHandle,dirHandle.values(), await dirHandle.values().next());
+            for await (const entry of dirHandle.values()) {
+                console.log("entry", entry);
+            }
+
+        }
+
+    </script>
+</body>
+
+</html>
