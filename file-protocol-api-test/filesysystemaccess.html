@@ -15,17 +15,32 @@
         async function getFile() {
             // open file picker
             dirHandle = await window.showDirectoryPicker();
-            
+
             if (dirHandle.kind === 'file') {
                 // run file code
             } else if (dirHandle.kind === 'directory') {
                 // run directory code
             }
-            
-            console.log("fileHandle", dirHandle,dirHandle.values(), await dirHandle.values().next());
-            for await (const entry of dirHandle.values()) {
-                console.log("entry", entry);
+
+            console.log("fileHandle", dirHandle, dirHandle.values(), await dirHandle.values().next());
+            console.log(dirHandle);
+            async function loopDir(directoryHandle) {
+                let looped = []
+                // console.time('loop started')
+                for await (const entry of dirHandle.values()) {
+                    console.log("entry", entry);
+                    entry.kind === "file" ? looped.push(entry) :null;
+                    entry.kind === "directory" ? looped.push({...entry,files: await loopDir(entry.getDirectoryHandle())}) : null;
+                    // entry.kind === "directory" ? console.log('',entry.values()) : null;
+                }
+                // console.time('loop stoped');
+                return looped;
             }
+            let treeObject = loopDir(dirHandle);
+            console.log('all files', await treeObject);
+            // for await (const entry of dirHandle.values()) {
+            //     console.log("entry", entry);
+            // }
 
         }
 
