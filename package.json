@@ -1,0 +1,26 @@
+{
+  "name": "file-stream-api-test-deno-node",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/GjeloshajAntoine/File-Stream-Api-Test-Deno-Node.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/GjeloshajAntoine/File-Stream-Api-Test-Deno-Node/issues"
+  },
+  "homepage": "https://github.com/GjeloshajAntoine/File-Stream-Api-Test-Deno-Node#readme",
+  "dependencies": {
+    "better-sqlite3": "^8.3.0"
+  },
+  "devDependencies": {
+    "@faker-js/faker": "^7.6.0"
+  }
+}
