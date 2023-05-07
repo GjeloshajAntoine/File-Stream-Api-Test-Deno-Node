@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Stream le doc</title>
+</head>
+
+<body>
+    <script>
+        const data = fetch("/", {
+            method: "POST",
+            headers: {
+                "Content-type": "application/json",
+            },
+            body: `{"username":"x","password":"y"}`
+        })
+        console.log('data', data);
+
+        var input = document.createElement('input');
+        input.type = 'file';
+
+        input.onchange = e => {
+            var file = e.target.files[0];
+            fetch("/uploadstream", {
+                method: "POST",
+                headers: {
+                    "Content-type": "application/json",
+                    "x-file-name": file.name
+                },
+                body: file
+            })
+        }
+
+        document.body.appendChild(input)
+
+    </script>
+</body>
+
+</html>
