@@ -1,5 +1,6 @@
 import http  from 'node:http';
 import { readFile } from 'node:fs/promises';
+import {createWriteStream} from 'node:fs';
 
 const memu = () => process.memoryUsage().rss / (1024 * 1024);
 
@@ -16,14 +17,14 @@ const app = http.createServer(async (req, res) => {
     if (req.url === '/uploadstream') {
         console.log('name:', req.headers['x-file-name']);
         res.writeHead(200, { 'Content-Type': 'text/html' });
+        const upLoadedFile = createWriteStream(req.headers['x-file-name']);
         req.on('data', data => {
-            // process.stdout.cursorTo(0);
-            // process.stdout.moveCursor(0,0)
-            // process.stdout.write(req.socket.bytesRead+"");
-            // process.stdout.write(memu()+"");
-            // console.log('memu',memu());
-            // console.log('data ===============',(data+"").length);
+            upLoadedFile.write(data)
         });
+        req.on("end",() =>  {
+            console.log('ended stream');
+            upLoadedFile.end();
+        })
         const page = await readFile('index.html');
         return res.end(page.toString());
     }
