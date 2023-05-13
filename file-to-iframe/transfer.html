@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Transfer to</title>
+</head>
+
+<body>
+    <iframe id="frame" width="250" height="250" src="./destiframe.html"></iframe>
+    <input id="file" type="file" />
+    <script>
+        const messageQueue = {};
+        function mess(elem) {
+            if (typeof messageQueue[elem] !== "object") {
+                messageQueue[elem] = [];
+                elem.addEventListener("message", (e) => {
+                    const wrapObj = e.data;
+                    const mId = wrapObj.mId;
+                    if(!messageQueue[mId]) return;
+                    const cb = messageQueue[elem].splice(mdId,1);
+                    cb(wrapObj.data);
+                })
+            }
+
+            const postMessage = (message, origin, transferable) => {
+                const waitForMessage = (cb) => {
+                    const mId = messageQueue[elem].push(cb)
+                    const wrapObj = { mId, data: message }
+                    elem.contentWindow.postMessage(wrapObj, origin, transferable);
+                }
+                return new Promise(resolve => waitForMessage(data => resolve(data)))
+            }
+
+            return { postMessage }
+        }
+    </script>
+    <script>
+        const frame = document.getElementById('frame');
+        frame.addEventListener('load', () => {
+            frame.contentWindow.postMessage('Hello', '*');
+
+        })
+        document.getElementById('file').addEventListener('change', async e => {
+            var file = e.target.files[0];
+            const buffer = await file.arrayBuffer();
+            // const stream = new ReadableStream(buffer)
+            // console.log(buffer);
+            frame.contentWindow.postMessage({ theFile: file }, '*');
+            console.log(file);
+            console.log('byteLength', buffer.byteLength);
+
+        })
+    </script>
+</body>
+
+</html>
