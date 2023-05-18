@@ -33,8 +33,11 @@
                 }
                 return new Promise(resolve => waitForMessage(data => resolve(data)))
             }
+            const on = (message, cb) => {
 
-            return { postMessage }
+            };
+
+            return { on, postMessage };
         }
     </script>
     <script>
@@ -49,6 +52,8 @@
             // const stream = new ReadableStream(buffer)
             // console.log(buffer);
             frame.contentWindow.postMessage({ theFile: file }, '*');
+            const filefromFram = await mess(frame).postMessage({getFile:'file.text'},"*");
+            mess(fram).on("api call", (data, response) => console.log(data))
             console.log(file);
             console.log('byteLength', buffer.byteLength);
 
