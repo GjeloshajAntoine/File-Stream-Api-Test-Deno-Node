@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <script src="./messagelib.js"></script>
+</head>
+<body>
+    <iframe src="./iframe.html" id="frame" width="250" height="250" frameborder="0"></iframe>
+    <script type="module">
+        console.log("send");
+        const frame = document.getElementById('frame');
+        console.time('')
+        const response = await mess(frame).postMessage("hello", '*');
+        console.timeEnd('')
+        console.log('response:', response);
+        console.time('')
+        const resp = await mess(frame).postMessage("second message", '*');
+        console.timeEnd('')
+        console.log('response:', resp);
+    </script>
+</body>
+</html>

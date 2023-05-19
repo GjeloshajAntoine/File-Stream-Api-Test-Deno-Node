@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <script src="./messagelib.js"></script>
+    <style>
+        html {
+            background: darksalmon;
+        }
+    </style>
+</head>
+<body>
+    <div id="message">
+
+    </div>
+    <script>
+        console.log('on');
+        mess(window).on((e,response) => {
+            console.log('e.data', e.source);
+            if (e.data.data === "hello") {
+                document.getElementById('message').innerHTML+=(e.data.data + "<br />")
+                response("hello back",'*')
+            }
+            if (e.data.data ==="second message") {
+                response("second response", "*")
+            }
+        })
+    </script>
+</body>
+</html>
