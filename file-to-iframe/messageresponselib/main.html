@@ -8,7 +8,7 @@
     <script src="./messagelib.js"></script>
 </head>
 <body>
-    <iframe src="./iframe.html" id="frame" width="250" height="250" frameborder="0"></iframe>
+    <iframe src="http://localhost:9991/iframe.html" id="frame" width="250" height="250" frameborder="0"></iframe>
     <script type="module">
         console.log("send");
         const frame = document.getElementById('frame');
@@ -20,6 +20,8 @@
         const resp = await mess(frame).postMessage("second message", '*');
         console.timeEnd('')
         console.log('response:', resp);
+
+        mess(frame).on((e, response))
     </script>
 </body>
 </html>

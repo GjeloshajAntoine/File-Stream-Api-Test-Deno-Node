@@ -1,14 +1,17 @@
 async function pingThePong(elem) {
     let intervalId = setInterval(() => {
+        console.log("ping");
         elem.contentWindow.postMessage("ping", "*")
-    }, 1)
+    }, 40)
 
     await new Promise(resolve => {
-        elem.contentWindow.addEventListener('message',function cb(e) {
-            if (e.data === "pong" ) {
+        window.addEventListener('message',function cb(e) {
+            console.log("got back message", e.source === window ,e.source === elem.contentWindow,e.data);
+
+            if (e.data === "pong" && e.source === elem.contentWindow) {
                 resolve() 
                 clearInterval(intervalId);
-                elem.contentWindow.removeEventListener('message',cb);
+                window.removeEventListener('message',cb);
             }
         });
     });
@@ -19,7 +22,7 @@ async function pongThePing() {
         window.addEventListener("message", function cb(e) {
             if(e.data === "ping") {
                 res()
-                window.postMessage("pong","*")
+                window.parent.postMessage("pong","*")
                 window.removeEventListener("message",cb)
             }    
         })
@@ -34,30 +37,30 @@ function mess(elem) {
         if (typeof messageQueue[elem] !== "object") {
             messageQueue[elem] = [];
             await pingThePong(elem);
-            elem.contentWindow.addEventListener("message", (e) => {
-                const wrapObj = e.data;
-                const mId = wrapObj.mId;
-                if((!messageQueue[elem][mId]) || e.source !== elem.contentWindow) return;
-                const [cb] = messageQueue[elem].splice(mId,1);
-                cb(wrapObj.data);
+            window.addEventListener("message", (e) => {
+                if((!messageQueue[elem][e.data.mId]) || e.source !== elem.contentWindow) return;
+                const [cb] = messageQueue[elem].splice(e.data.mId,1);
+                cb(e.data.data);
             })
         }
 
-        const waitForMessage = (cb) => {
+        return new Promise(resolve =>{
+            const cb = data =>resolve(data)
             const mId = messageQueue[elem].push(cb) -1;
             const wrapObj = { mId, data: message }
             elem.contentWindow.postMessage(wrapObj, origin, transferable);
-        }
-        return new Promise(resolve => waitForMessage(data =>resolve(data)))
+
+        })
     }
     const on = async (cb) => {
+        await pongThePing()
+        console.log("pre on ", elem === window);
         elem.addEventListener("message", (e) => {
+            console.log("--on",e.data, e.source === elem.parent);
             if (typeof e.data.mId === "undefined") return;
-            e.data = e.data.data
-            const response = (messageData, origin, transferable) => elem.postMessage({mId:e.data.mId, data: messageData},origin,transferable)
+            const response = (messageData, origin, transferable) => elem.parent.postMessage({mId:e.data.mId, data: messageData},origin,transferable)
             cb(e,response)
         })
-        await pongThePing()
     };
 
     return { on, postMessage };

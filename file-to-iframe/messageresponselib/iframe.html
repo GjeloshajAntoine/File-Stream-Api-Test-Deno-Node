@@ -19,12 +19,12 @@
     <script>
         console.log('on');
         mess(window).on((e,response) => {
-            console.log('e.data', e.source);
             if (e.data.data === "hello") {
                 document.getElementById('message').innerHTML+=(e.data.data + "<br />")
                 response("hello back",'*')
             }
             if (e.data.data ==="second message") {
+                document.getElementById('message').innerHTML+=(e.data.data + "<br />")
                 response("second response", "*")
             }
         })
