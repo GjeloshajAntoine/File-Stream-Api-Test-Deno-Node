@@ -1,3 +1,5 @@
+const i = (frame) => frame.parent || frame.contentWindow || frame;
+
 async function pingThePong(elem) {
     let intervalId = setInterval(() => {
         console.log("ping");
