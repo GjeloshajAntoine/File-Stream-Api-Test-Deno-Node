@@ -20,14 +20,19 @@
         console.log('on');
         mess(window).on((e,response) => {
             if (e.data.data === "hello") {
+                console.log("got hello");
                 document.getElementById('message').innerHTML+=(e.data.data + "<br />")
                 response("hello back",'*')
             }
             if (e.data.data ==="second message") {
                 document.getElementById('message').innerHTML+=(e.data.data + "<br />")
+                console.log("got message  second response");
                 response("second response", "*")
+            } else if (e.data.data.startsWith?.("pos")) {
+                response(e.data.data, "*")
             }
         })
+        mess(window).postMessage("message from iframe", '*')
     </script>
 </body>
 </html>

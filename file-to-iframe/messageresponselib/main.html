@@ -9,19 +9,41 @@
 </head>
 <body>
     <iframe src="http://localhost:9991/iframe.html" id="frame" width="250" height="250" frameborder="0"></iframe>
+    <div id="movAround" style="width: 150px;height: 30vh; background-color: yellowgreen;"></div>
     <script type="module">
         console.log("send");
         const frame = document.getElementById('frame');
         console.time('')
         const response = await mess(frame).postMessage("hello", '*');
+        console.log("post first");
         console.timeEnd('')
         console.log('response:', response);
         console.time('')
         const resp = await mess(frame).postMessage("second message", '*');
         console.timeEnd('')
         console.log('response:', resp);
-
-        mess(frame).on((e, response))
+        console.log("main will listen");
+        let ipo = 0;
+        mess(frame).on((e, response) => { 
+            // console.log("on main", e, response)
+            if (e.data.data.startsWith?.("pos")) {
+                const [m,x,y,i] = e.data.data.split(",")
+                console.timeEnd('position'+ipo)
+                document.getElementById("movAround").style.position = "absolute";
+                document.getElementById("movAround").style.left = x + "px";
+                document.getElementById("movAround").style.top = y + "px";
+            }
+        })
+        document.getElementById("movAround").addEventListener('mousedown', (e) => {
+            const onMove =  e => {
+                ipo = ipo + 1;
+                console.time("position"+ipo)
+                console.log(e);
+                mess(frame).postMessage(`pos,${e.pageX},${e.pageY},${ipo}`,"*")
+            };
+            window.addEventListener("mousemove",onMove)
+            e.target.addEventListener('mouseup', () => window.removeEventListener("mousemove", onMove));
+        })
     </script>
 </body>
 </html>
