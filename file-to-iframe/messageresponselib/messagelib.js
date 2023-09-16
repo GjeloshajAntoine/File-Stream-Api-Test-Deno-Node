@@ -33,9 +33,12 @@ async function pongThePing(elem) {
 const messageQueue = {};
 function mess(elem) {
     const postMessage = async (message, origin, transferable) => {
+        messageQueue[elem] 
         if (typeof messageQueue[elem] !== "object") {
             messageQueue[elem] = [];
+            console.time("pingpong")
             await pingThePong(elem);
+            console.timeEnd("pingpong")
             window.addEventListener("message", (e) => {
                 if((!messageQueue[elem][e.data.mId]) || e.source !== elem.contentWindow) return;
                 const [cb] = messageQueue[elem].splice(e.data.mId,1);
