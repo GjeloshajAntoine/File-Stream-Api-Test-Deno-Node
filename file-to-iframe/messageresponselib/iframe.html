@@ -28,7 +28,8 @@
                 document.getElementById('message').innerHTML+=(e.data.data + "<br />")
                 console.log("got message  second response");
                 response("second response", "*")
-            } else if (e.data.data.startsWith?.("pos")) {
+            } else if (e.data.data.pos === "pos") {
+                console.log("pos");
                 response(e.data.data, "*")
             }
         })
